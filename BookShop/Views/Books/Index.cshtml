@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Domain.Models.Book>
+@using Domain.Models
+
+@using Domain.DataAccess
+@inject BooksDbContext _context
+
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@{
+    ViewData["Title"] = "Книги";
+    var userType = UserType.User;
+
+    if (User.Identity.Name != null)
+    {
+        if (UserManager.FindByNameAsync(User.Identity.Name).Result != null)
+        {
+            userType = UserManager.FindByNameAsync(User.Identity.Name).Result.UserType;
+        }
+    }
+}
+
+
+
+<div class="book__container">
+
+    @if (Model.Count() == 0)
+    {
+    <div style="display: flex; flex-direction: column;">
+        <h3>Пусто...</h3>
+        <p>Пока здесь нет книг</p>
+    </div>
+
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            if (item.Photo == null)
+            {
+                <div class="book__card" style="background: url(" https: //st4.depositphotos.com/2381417/26959/i/600/depositphotos_269592716-stock-photo-no-thumbnail-images-placeholder-for.jpg") no-repeat;">
+                    <div class="book__info">
+                        <p class="title">@item.Title</p>
+                        <p class="genre">@_context.Genres.FirstOrDefault(x => x.Id == item.GenreId).Title</p>
+                        <a asp-action="Details" asp-route-id="@item.Id">Читать</a>
+                    </div>
+
+                </div>
+            }
+            else
+            {
+                <div class="book__card" style="background: url(data:image/jpeg;base64,@Convert.ToBase64String(item.Photo)) no-repeat;">
+                    <div class="book__info">
+                        <p class="title">@item.Title</p>
+                        <p class="genre">@_context.Genres.FirstOrDefault(x => x.Id == item.GenreId).Title</p>
+                        <a asp-action="Details" asp-route-id="@item.Id">Читать</a>
+                    </div>
+
+                </div>
+
+            }
+
+        }
+    }
+
+
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

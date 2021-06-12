@@ -1,0 +1,99 @@
+﻿@model Domain.Models.Book
+@using Domain.DataAccess
+@using Microsoft.AspNetCore.Identity
+@using Domain.Models
+@inject BooksDbContext _context
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@{
+    ViewData["Title"] = Model.Title;
+    var userType = UserType.User;
+
+    if (User.Identity.Name != null)
+    {
+        if (UserManager.FindByNameAsync(User.Identity.Name).Result != null)
+        {
+            userType = UserManager.FindByNameAsync(User.Identity.Name).Result.UserType;
+        }
+    }
+
+    BookUser bookTemp = null;
+    if (SignInManager.IsSignedIn(User))
+    {
+        var bookId = Model.Id;
+        var userId = UserManager.FindByNameAsync(User.Identity.Name).Result.Id;
+        bookTemp = _context.BookUser.Where(x => x.UserId == Guid.Parse(userId)).FirstOrDefault(x => x.BookId == bookId);
+    }
+
+}
+
+
+<div class="book__detail">
+    <a asp-action="Index" class="fas fa-arrow-circle-left arrow__back"></a>
+    <div class="price__poster">
+        <div style="height: 30%;">
+            @if (Model.Photo != null)
+            {
+                <div class="poster" style="background: url(data:image/jpeg;base64,@(Convert.ToBase64String(Model.Photo))) no-repeat; background-size: cover;">
+
+                </div>
+            }
+            else
+            {
+                <div class="poster" style="background: url('not_image.jpg') no-repeat;">
+
+                </div>
+            }
+            <p class="price">Цена: @Model.Price тенге</p>
+            @if (bookTemp == null)
+            {
+                <a asp-action="Buy" asp-route-id="@Model.Id" class="button btn__buy">Купить</a>
+                <span style="margin-top: 10px;" class="text-danger">@ViewData["Error"]</span>
+            }
+            else
+            {
+                <span style="margin-top: 10px;">Вы приобрели эту книгу</span>
+            }
+
+        </div>
+
+    </div>
+
+    <div class="info">
+        <table>
+            <tr>
+                <td class="header">Название:</td>
+                <td></td>
+                <td>@Model.Title</td>
+            </tr>
+            <tr>
+                <td class="header">Автор:</td>
+                <td></td>
+                <td>@Model.Author</td>
+            </tr>
+            <tr>
+                <td class="header">Жанр:</td>
+                <td></td>
+                <td>@_context.Genres.FirstOrDefault(x => x.Id == Model.GenreId).Title</td>
+            </tr>
+            <tr>
+                <td class="header">Год:</td>
+                <td></td>
+                <td>@Model.Year</td>
+            </tr>
+
+        </table>
+        <p class="description">Описание:</p>
+        <p style="word-break: break-all;">@Model.Description</p>
+    </div>
+</div>
+
+
+
+@*@if (userType == UserType.Admin)
+    {
+        <a asp-action="Edit" class="btn btn-warning" asp-route-id="@Model.Id">Редактировать</a>
+        <a asp-action="Delete" class="btn btn-danger" asp-route-id="@Model.Id">Удалить</a>
+    }*@
+

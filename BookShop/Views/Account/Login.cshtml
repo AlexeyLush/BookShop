@@ -1,0 +1,27 @@
+﻿@model BookShop.ViewModels.Account.LoginViewModel
+
+@{
+    ViewData["Title"] = "Вход";
+
+}
+<h2>Вход</h2>
+<form method="post" style="width: 50%" asp-controller="Account" asp-action="Login">
+    <div style="margin: 0 auto; margin-top: 10px;" class="form-group">
+        <label asp-for="Email" for="email">@Html.DisplayNameFor(model => model.Email)</label>
+        <input asp-for="Email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Введите email">
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div style="margin-top: 10px;" class="form-group">
+        <label asp-for="Password" for="password">@Html.DisplayNameFor(model => model.Password)</label>
+        <input asp-for="Password" type="password" class="form-control" id="password" placeholder="Введите пароль">
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div style="margin-top: 10px;" asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <button style="margin-top: 10px;" type="submit" class="btn btn-primary">
+        Войти
+    </button>
+
+
+</form>

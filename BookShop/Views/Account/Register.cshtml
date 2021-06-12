@@ -1,0 +1,29 @@
+﻿@model BookShop.ViewModels.Account.RegisterViewModel
+
+@{ 
+    ViewData["Title"] = "Регистрация";
+}
+
+<h2>Регистрация</h2>
+<form style="width: 50%" method="post"  asp-controller="Account" asp-action="Register">
+    <div style="margin: 0 auto; margin-top: 10px;" class="form-group">
+        <label asp-for="Email" for="email">@Html.DisplayNameFor(model => model.Email)</label>
+        <input asp-for="Email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Введите email">
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div style="margin-top: 10px;" class="form-group">
+        <label asp-for="Password" for="password">@Html.DisplayNameFor(model => model.Password)</label>
+        <input asp-for="Password" type="password" class="form-control" id="password" placeholder="Введите пароль">
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div style="margin-top: 10px;" class="form-group">
+        <label asp-for="PasswordConfirm" for="passwordConfirm">@Html.DisplayNameFor(model => model.PasswordConfirm)</label>
+        <input asp-for="PasswordConfirm" type="password" class="form-control" id="passwordConfirm" placeholder="Повторите пароль">
+        <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
+    </div>
+
+    <button style="margin-top: 10px;" type="submit" class="btn btn-primary">
+        Регистрация
+    </button>
+</form>

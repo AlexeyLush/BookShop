@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Domain.Models
+@using Domain.DataAccess
+@inject BooksDbContext _context
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <div style="display: flex; justify-content: center; align-items:center;">
+
+            <div style="display: flex; flex-direction: column;">
+                @User.Identity.Name
+
+                <p style="height: 10px;">Ваш баланс: @_context.Users.FirstOrDefault(x => x.Email == User.Identity.Name).Cash тенге</p>
+
+            </div>
+
+
+            <a style="margin-left: 30px;" asp-controller="Account" asp-action="AddCash" class="btn btn-outline-secondary">Пополнить баланс</a>
+
+            <form class="form-inline" asp-controller="Account" asp-action="Logout">
+                <button style="margin-left: 5px;" type="submit" class="btn btn-outline-secondary">Выйти</button>
+            </form>
+        </div>
+
+    }
+    else
+    {
+        <form class="form-inline">
+            <a asp-controller="Account" asp-action="Login" class="btn btn-outline-secondary">Вход</a>
+            <a asp-controller="Account" asp-action="Register" class="btn btn-outline-secondary">Регистрация</a>
+        </form>
+    }
+</ul>
