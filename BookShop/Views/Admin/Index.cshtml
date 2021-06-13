@@ -1,7 +1,7 @@
 ﻿@using Domain.Models
 @using Domain.DataAccess
-@inject BooksDbContext _context
 
+@inject BooksDbContext _context
 
 
 @{
@@ -9,6 +9,8 @@
     var books = _context.Books.ToList();
     var genres = _context.Genres.ToList();
 }
+
+
 
 <p>Книги</p>
 
@@ -61,17 +63,21 @@
     <tbody>
         @foreach (var genre in genres)
         {
-        <tr>
-            <td>@genre.Title</td>
-            <td>
-                <a asp-action="Edit" asp-controller="Genres" class="btn btn-warning" asp-route-id="@genre.Id">Редактировать</a>
-                <a asp-action="Delete" asp-controller="Genres" class="btn btn-danger" asp-route-id="@genre.Id">Удалить</a>
-            </td>
-        </tr>
-        }
+            <tr>
+                <td>@genre.Title</td>
+                <td>
+                    <a asp-action="Edit" asp-controller="Genres" class="btn btn-warning" asp-route-id="@genre.Id">Редактировать</a>
+                    @if (_context.Books.Where(x => x.GenreId == genre.Id).Count() == 0)
+                    {
+                        <a asp-action="Delete" asp-controller="Genres" class="btn btn-danger" asp-route-id="@genre.Id">Удалить</a>
+                    }
 
-    </tbody>
-</table>
+                </td>
+                </tr>
+            }
+
+                </tbody>
+            </table>
 
 
 

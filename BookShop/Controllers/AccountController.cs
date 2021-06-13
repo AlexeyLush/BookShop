@@ -179,7 +179,7 @@ namespace BookShop.Controllers
 
             var user = _userManager.FindByNameAsync(User.Identity.Name).Result;
 
-            var bookUser = _context.BookUser.Where(x => x.UserId == Guid.Parse(user.Id));
+            var bookUser = _context.BookUser.Where(x => x.UserId == Guid.Parse(user.Id)).ToList();
 
             var bookList = new List<Book>();
 

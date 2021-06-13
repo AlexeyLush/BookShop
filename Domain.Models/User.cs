@@ -8,6 +8,6 @@ namespace Domain.Models
     {
         public UserType UserType { get; set; }
         public IList<Book> Books { get; set; } = new List<Book>();
-        public int Cash { get; set; } = 5000;
+        public int Cash { get; set; } = 0;
     }
 }
